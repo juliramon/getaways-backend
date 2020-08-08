@@ -86,7 +86,7 @@ List of extra features not included in the MVP:
 - [excalidraw](#)
 
 ## Links
-- [Frontend Repo](#)
+- [Frontend Repo](https://github.com/juliramon/getaways-frontend)
 - [Heroku](#)
 - [Trello](#)
 - [Slides](#)
