@@ -82,6 +82,9 @@ List of extra features not included in the MVP:
 - **read_time**: Number
 - **featured**: Boolean
 
+##Wireframes
+- [excalidraw](#)
+
 ## Links
 - [Frontend Repo](#)
 - [Heroku](#)
