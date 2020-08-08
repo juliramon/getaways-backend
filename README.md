@@ -83,7 +83,7 @@ List of extra features not included in the MVP:
 - **featured**: Boolean
 
 ## Wireframes
-- [excalidraw](#)
+- [Excalidraw](https://excalidraw.com/#json=5202385194450944,ItMtODZ9uvL91BZOFA31vg)
 
 ## Links
 - [Frontend Repo](https://github.com/juliramon/getaways-frontend)
