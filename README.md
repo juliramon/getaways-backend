@@ -5,7 +5,7 @@ Backend repo | Getaways.guru
 Juli Ramon
 
 ## Link to the app
-[enter link here](#)
+[Getaways.guru](#)
 
 ## Description
 
