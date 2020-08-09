@@ -15,13 +15,13 @@ passport.deserializeUser((userIdFromSession, cb) => {
 });
 
 passport.use(
-	new LocalStrategy((username, passwport, next) => {
-		User.findOne({username}, (err, foundUser) => {
+	new LocalStrategy((email, password, next) => {
+		User.findOne({email}, (err, foundUser) => {
 			if (err) {
 				return next(err);
 			}
 			if (!foundUser) {
-				return next(null, false, {message: "Incorrect username"});
+				return next(null, false, {message: "Incorrect email"});
 			}
 			if (!bcrypt.compareSync(password, foundUser.password)) {
 				return next(null, false, {message: "Incorrect password"});
