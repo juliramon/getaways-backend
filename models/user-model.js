@@ -15,6 +15,11 @@ const userSchema = new Schema(
 			type: String,
 			required: true,
 		},
+		avatar: {
+			type: String,
+			default:
+				"https://res.cloudinary.com/juligoodie/image/upload/v1597507413/Getaways.guru/empty-avatar_jg3ooj.svg",
+		},
 	},
 	{
 		timestamps: true,

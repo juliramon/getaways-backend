@@ -69,5 +69,9 @@ authRoutes.post("/auth/login", (req, res, next) => {
 		});
 	})(req, res, next);
 });
+authRoutes.post("/auth/logout", (req, res, next) => {
+	req.logout();
+	res.status(200).json({message: "Log out success!"});
+});
 
 module.exports = authRoutes;
