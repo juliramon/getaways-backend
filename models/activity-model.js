@@ -22,6 +22,15 @@ const activitySchema = new Schema(
 		status: {
 			type: String,
 		},
+		duration: {
+			type: Number,
+		},
+		price: {
+			type: String,
+		},
+		rating: {
+			type: Number,
+		},
 		owner: {
 			type: Schema.Types.ObjectId,
 			ref: "User",

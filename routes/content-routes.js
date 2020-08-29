@@ -29,4 +29,23 @@ router.get("/userActivities", (req, res, next) => {
 		.catch((err) => res.json(err));
 });
 
+router.get("/activities/:id", (req, res, next) => {
+	Activity.findById(req.params.id)
+		.then((activity) => res.json(activity))
+		.catch((err) => res.json(err));
+});
+
+router.delete("/activities/:id", (req, res, next) => {
+	Activity.findByIdAndRemove(req.params.id)
+		.then(() => res.json({message: "Activity removed successfully"}))
+		.catch((err) => res.json(err));
+});
+
+router.put("/activities/:id", (req, res, next) => {
+	console.log(req.body);
+	Activity.findByIdAndUpdate(req.params.id, req.body)
+		.then(() => res.json({message: "Activity updated successfully"}))
+		.catch((err) => res.json(err));
+});
+
 module.exports = router;
