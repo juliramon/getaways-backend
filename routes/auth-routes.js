@@ -3,18 +3,22 @@ const authRoutes = express.Router();
 const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user-model");
+const {deleteOne} = require("../models/user-model");
 
 authRoutes.post("/auth/signup", (req, res, next) => {
 	const {fullName, email, password} = req.body;
 	if (!fullName || !email || !password) {
 		return res
 			.status(400)
-			.json({message: "Provide fullname, email and password"});
+			.json({message: "Please provide fullname, email and password"});
 	}
 	if (password.length < 7) {
 		return res
 			.status(400)
-			.json({message: "Please provide a stronger password"});
+			.json({
+				message:
+					"Please provide a stronger password of at least 8 alphanumeric characters",
+			});
 	}
 	User.findOne({email}, (err, foundUser) => {
 		if (err) {
@@ -51,27 +55,32 @@ authRoutes.post("/auth/signup", (req, res, next) => {
 authRoutes.post("/auth/login", (req, res, next) => {
 	passport.authenticate("local", (err, theUser, failureDetails) => {
 		if (err) {
-			res
+			return res
 				.status(500)
 				.json({message: "Something went wrong authenticating user"});
-			return;
 		}
 		if (!theUser) {
-			res.status(401).json(failureDetails);
-			return;
+			return res.status(401).json(failureDetails);
 		}
 		req.login(theUser, (err) => {
 			if (err) {
-				res.status(500).json({message: "Session save went bad."});
-				return;
+				return res.status(500).json({message: "Session save went bad."});
 			}
 			res.status(200).json(theUser);
 		});
 	})(req, res, next);
 });
+
 authRoutes.post("/auth/logout", (req, res, next) => {
 	req.logout();
 	res.status(200).json({message: "Log out success!"});
+});
+
+authRoutes.get("/auth/loggedin", (req, res, next) => {
+	if (req.isAuthenticated()) {
+		return res.status(200).json(req.user);
+	}
+	res.status(403).json({message: "Unauthorized"});
 });
 
 module.exports = authRoutes;

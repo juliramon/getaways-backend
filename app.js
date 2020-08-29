@@ -4,7 +4,6 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const express = require("express");
 const favicon = require("serve-favicon");
-const hbs = require("hbs");
 const mongoose = require("mongoose");
 const logger = require("morgan");
 const path = require("path");
@@ -15,7 +14,10 @@ const passport = require("passport");
 require("./configs/passport");
 
 mongoose
-	.connect("mongodb://localhost/getaways-backend", {useNewUrlParser: true})
+	.connect("mongodb://localhost/getaways-backend", {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	})
 	.then((x) => {
 		console.log(
 			`Connected to Mongo! Database name: "${x.connections[0].name}"`
@@ -57,7 +59,6 @@ app.use(
 		saveUninitialized: true,
 	})
 );
-
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -72,7 +73,9 @@ app.use(
 
 const index = require("./routes/index");
 const authRoutes = require("./routes/auth-routes");
+const contentRoutes = require("./routes/content-routes");
 app.use("/", index);
 app.use("/api", authRoutes);
+app.use("/api", contentRoutes);
 
 module.exports = app;
