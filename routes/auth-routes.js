@@ -3,7 +3,6 @@ const authRoutes = express.Router();
 const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user-model");
-const {deleteOne} = require("../models/user-model");
 
 authRoutes.post("/auth/signup", (req, res, next) => {
 	const {fullName, email, password} = req.body;
@@ -13,12 +12,10 @@ authRoutes.post("/auth/signup", (req, res, next) => {
 			.json({message: "Please provide fullname, email and password"});
 	}
 	if (password.length < 7) {
-		return res
-			.status(400)
-			.json({
-				message:
-					"Please provide a stronger password of at least 8 alphanumeric characters",
-			});
+		return res.status(400).json({
+			message:
+				"Please provide a stronger password of at least 8 alphanumeric characters",
+		});
 	}
 	User.findOne({email}, (err, foundUser) => {
 		if (err) {
@@ -81,6 +78,42 @@ authRoutes.get("/auth/loggedin", (req, res, next) => {
 		return res.status(200).json(req.user);
 	}
 	res.status(403).json({message: "Unauthorized"});
+});
+
+authRoutes.post("/auth/googlesignup", (req, res, next) => {
+	console.log(req.body);
+	const {fullName, email, imageUrl} = req.body;
+	if (!fullName || !email || !imageUrl) {
+		return res.status(400).json({message: "Missing data"});
+	}
+	User.findOne({email}, (err, foundUser) => {
+		if (err) {
+			return res.status(500).json({message: "Email check went bad"});
+		}
+		if (foundUser) {
+			return res
+				.status(400)
+				.json({message: "Email already exists. Choose another account."});
+		}
+		const newUser = new User({
+			fullName: fullName,
+			email: email,
+			avatar: imageUrl,
+		});
+		newUser.save((err) => {
+			if (err) {
+				return res
+					.status(400)
+					.json({message: "Saving user to database went wrong"});
+			}
+			req.login(newUser, (err) => {
+				if (err) {
+					return res.status(500).json({message: "Login after signup went bad"});
+				}
+				res.status(200).json(newUser);
+			});
+		});
+	});
 });
 
 module.exports = authRoutes;

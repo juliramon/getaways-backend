@@ -34,6 +34,13 @@ const debug = require("debug")(
 
 const app = express();
 
+app.use(
+	cors({
+		credentials: true,
+		origin: ["http://localhost:3000", "http://localhost:3001"],
+	})
+);
+
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -57,6 +64,7 @@ app.use(
 		secret: "secret string",
 		resave: true,
 		saveUninitialized: true,
+		cookie: {maxAge: 600000},
 	})
 );
 app.use(passport.initialize());
@@ -64,18 +72,12 @@ app.use(passport.session());
 
 app.locals.title = "Express - Generated with IronGenerator";
 
-app.use(
-	cors({
-		credentials: true,
-		origin: ["http://localhost:3000", "http://localhost:3001"],
-	})
-);
-
 const index = require("./routes/index");
 const authRoutes = require("./routes/auth-routes");
 const contentRoutes = require("./routes/content-routes");
 app.use("/", index);
 app.use("/api", authRoutes);
 app.use("/api", contentRoutes);
+app.use("/api", require("./routes/file-upload-routes"));
 
 module.exports = app;

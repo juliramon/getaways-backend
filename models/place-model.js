@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const activitySchema = new Schema(
+const placeSchema = new Schema(
 	{
 		type: {
 			type: String,
@@ -12,39 +12,40 @@ const activitySchema = new Schema(
 		},
 		subtitle: {
 			type: String,
-			required: true,
 		},
 		images: {
 			type: Array,
-			required: true,
 		},
 		description: {
 			type: String,
-			required: true,
 		},
 		location: {
 			type: String,
-			required: true,
 		},
 		status: {
 			type: String,
 			enum: ["editing", "posted", "archived"],
 		},
-		duration: {
-			type: Number,
-			min: 0,
-			default: 0,
-		},
 		price: {
 			type: String,
-			min: 0,
-			default: 0,
 		},
 		rating: {
 			type: Number,
 			min: 0,
-			default: 0,
 			max: 5,
+			default: 0,
+		},
+		category: {
+			type: String,
+			enum: [
+				"hotel",
+				"apartment",
+				"bubble",
+				"igloo",
+				"cabin",
+				"country house",
+				"tree house",
+			],
 		},
 		owner: {
 			type: Schema.Types.ObjectId,
@@ -56,5 +57,5 @@ const activitySchema = new Schema(
 	}
 );
 
-const Activity = mongoose.model("Activity", activitySchema);
-module.exports = Activity;
+const Place = mongoose.model("Place", placeSchema);
+module.exports = Place;

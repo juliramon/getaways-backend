@@ -13,12 +13,32 @@ const userSchema = new Schema(
 		},
 		password: {
 			type: String,
-			required: true,
 		},
 		avatar: {
 			type: String,
 			default:
 				"https://res.cloudinary.com/juligoodie/image/upload/v1597507413/Getaways.guru/empty-avatar_jg3ooj.svg",
+		},
+		cover: {
+			type: String,
+		},
+		username: {
+			type: String,
+		},
+		bio: {
+			type: String,
+		},
+		location: {
+			type: String,
+		},
+		following: {
+			type: Array,
+		},
+		followers: {
+			type: Array,
+		},
+		userType: {
+			type: String,
 		},
 	},
 	{
