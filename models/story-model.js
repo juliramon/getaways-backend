@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const activitySchema = new Schema(
+const storySchema = new Schema(
 	{
 		type: {
 			type: String,
@@ -22,29 +22,14 @@ const activitySchema = new Schema(
 			type: String,
 			required: true,
 		},
-		location: {
-			type: String,
-			required: true,
-		},
 		status: {
 			type: String,
 			enum: ["editing", "posted", "archived"],
 		},
-		duration: {
+		likes: {
 			type: Number,
 			min: 0,
 			default: 0,
-		},
-		price: {
-			type: String,
-			min: 0,
-			default: 0,
-		},
-		rating: {
-			type: Number,
-			min: 0,
-			default: 0,
-			max: 5,
 		},
 		owner: {
 			type: Schema.Types.ObjectId,
@@ -56,5 +41,5 @@ const activitySchema = new Schema(
 	}
 );
 
-const Activity = mongoose.model("Activity", activitySchema);
-module.exports = Activity;
+const Story = mongoose.model("Story", storySchema);
+module.exports = Story;

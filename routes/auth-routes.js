@@ -3,8 +3,6 @@ const authRoutes = express.Router();
 const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user-model");
-const {deleteOne} = require("../models/user-model");
-const CLIENT_HOMEPAGE_URL = "http://localhost:3000";
 
 authRoutes.post("/auth/signup", (req, res, next) => {
 	const {fullName, email, password} = req.body;
