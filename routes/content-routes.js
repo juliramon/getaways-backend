@@ -69,9 +69,16 @@ router.get("/users/:id", (req, res, next) => {
 
 router.put("/users/:id", (req, res, next) => {
 	console.log(req.body);
-	User.findByIdAndUpdate(req.params.id, req.body)
-		.then((res) => res.json({message: "User updated"}))
-		.catch((err) => res.json(err));
+	if (req.body.cover) {
+		console.log("req.body");
+		User.findByIdAndUpdate(req.params.id, req.body)
+			.then((res) => res.json({message: "User updated"}))
+			.catch((err) => res.json(err));
+	} else {
+		User.findByIdAndUpdate(req.params.id, req.body)
+			.then((res) => res.json({message: "User updated"}))
+			.catch((err) => res.json(err));
+	}
 });
 
 router.post("/place", (req, res, next) => {
