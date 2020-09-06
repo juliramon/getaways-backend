@@ -4,6 +4,7 @@ const Activity = require("../models/activity-model");
 const Place = require("../models/place-model");
 const Story = require("../models/story-model");
 const User = require("../models/user-model");
+const Bookmark = require("../models/bookmark-model");
 
 router.post("/activity", (req, res, next) => {
 	Activity.create({
@@ -54,7 +55,7 @@ router.put("/activities/:id", (req, res, next) => {
 		.catch((err) => res.json(err));
 });
 
-router.get("/users/", (req, res, next) => {
+router.get("/users", (req, res, next) => {
 	User.find({})
 		.then((users) => res.json(users))
 		.catch((err) => res.json(err));
@@ -84,6 +85,12 @@ router.post("/place", (req, res, next) => {
 		owner: req.user._id,
 	})
 		.then((response) => res.json(response))
+		.catch((err) => res.json(err));
+});
+
+router.get("/places", (req, res, next) => {
+	Place.find({})
+		.then((places) => res.json(places))
 		.catch((err) => res.json(err));
 });
 
@@ -126,16 +133,22 @@ router.post("/story", (req, res, next) => {
 		.catch((err) => res.json(err));
 });
 
+router.get("/stories", (req, res, next) => {
+	Story.find({})
+		.then((stories) => res.json(stories))
+		.catch((err) => res.json(err));
+});
+
 router.get("/users/:id/stories", (req, res, next) => {
 	Story.find({owner: req.params.id})
-		.then((places) => res.json(places))
+		.then((stories) => res.json(stories))
 		.catch((err) => res.json(err));
 });
 
 router.get("/stories/:id", (req, res, next) => {
 	Story.findById(req.params.id)
 		.populate("owner")
-		.then((place) => res.json(place))
+		.then((story) => res.json(story))
 		.catch((err) => res.json(err));
 });
 
@@ -149,6 +162,60 @@ router.put("/stories/:id", (req, res, next) => {
 router.delete("/stories/:id", (req, res, next) => {
 	Story.findByIdAndRemove(req.params.id)
 		.then(() => res.json({message: "Story removed successfully"}))
+		.catch((err) => res.json(err));
+});
+
+router.post("/bookmark", (req, res, next) => {
+	let contentRef;
+	if (req.body.listingType === "activity") {
+		contentRef = "bookmarkActivityRef";
+	} else if (req.body.listingType === "place") {
+		contentRef = "bookmarkPlaceRef";
+	} else {
+		contentRef = "bookmarkStoryRef";
+	}
+	Bookmark.find({[contentRef]: req.body.listingId}).then((arrBookmarks) => {
+		let bookmark = arrBookmarks[0];
+		if (bookmark) {
+			if (bookmark.isRemoved === false) {
+				Bookmark.updateOne({_id: bookmark._id}, {isRemoved: true}).then(() =>
+					res
+						.json({message: "Listing removed from bookmarks!"})
+						.catch((err) => res.json(err))
+				);
+			} else if (bookmark.isRemoved === true) {
+				Bookmark.updateOne({_id: bookmark._id}, {isRemoved: false})
+					.then(() => res.json({message: "Listing bookmarked!"}))
+					.catch((err) => res.json(err));
+			}
+		} else {
+			Bookmark.create({
+				[contentRef]: req.body.listingId,
+				owner: req.user._id,
+			})
+				.then((response) => res.json(response))
+				.catch((err) => res.json(err));
+		}
+	});
+});
+
+router.get("/activebookmarks", (req, res, next) => {
+	Bookmark.find({owner: req.user._id, isRemoved: false})
+		.populate("owner")
+		.populate("bookmarkActivityRef")
+		.populate("bookmarkPlaceRef")
+		.populate("bookmarkStoryRef")
+		.then((bookmarks) => res.json(bookmarks))
+		.catch((err) => res.json(err));
+});
+
+router.get("/bookmarks", (req, res, next) => {
+	Bookmark.find({owner: req.user._id})
+		.populate("owner")
+		.populate("bookmarkActivityRef")
+		.populate("bookmarkPlaceRef")
+		.populate("bookmarkStoryRef")
+		.then((bookmarks) => res.json(bookmarks))
 		.catch((err) => res.json(err));
 });
 
