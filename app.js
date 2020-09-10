@@ -80,8 +80,4 @@ app.use("/api", authRoutes);
 app.use("/api", contentRoutes);
 app.use("/api", require("./routes/file-upload-routes"));
 
-app.use((req, res, next) => {
-	res.sendFile(__dirname + "/public/index.html");
-});
-
 module.exports = app;
