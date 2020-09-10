@@ -5,7 +5,7 @@ Backend repo | Getaways.guru
 Juli Ramon
 
 ## Link to the app
-[enter link here](#)
+[Getaways.guru](#)
 
 ## Description
 
@@ -28,6 +28,7 @@ Getaways.guru is a discovery platform where community members can search, book a
 - **Sign up**: As a user I want to sign up –either with my email or my Google or Facebook account– to the app to create my personal account to search, book and publish content
 - **Log in**: As a user I want to be able to log in to the app to access and manage my personal account
 - **Log out**: As a user I want to be able to log out from the app so that no one else has access to my account
+- **Home onpage (Feed)**: As a user I want to be able to access the home onpage -personal feed- to get recommended results and search for content
 - **User profile**: As a user I want to be able to access my user profile to manage my content and account details
 - **Content lists**: As a user I want to be able to see content lists –getaways, places, experiences and stories– to read before booking or executing an action
 - **Content creation**: As a user I want to be able to promote/publish new content -getaways, places, experiences and stories- so that others can read them as well as to get more clients to my property
@@ -35,11 +36,11 @@ Getaways.guru is a discovery platform where community members can search, book a
 ## Backlog
 List of extra features not included in the MVP:
 
-- **Home onpage (Feed)**: As a user I want to be able to access the home onpage -personal feed- to get recommended results and search for content
 - **Search**: As a user I want to be able to use the app browser to search for content and get dedicated results based on my queries
 - **Advanced search**: As a user I want to be able to apply additional filters to my search to improve my queries
 - **Save content**: As a user I want to be able to save content to my "Saved content" list
 - **Geo location**: As a user I want to be able to search and get custom recommendations base on my location
+- **Book getaways**: As a user I want to be able to book available getaways
 
 ## Routes
 
