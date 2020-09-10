@@ -14,7 +14,7 @@ const passport = require("passport");
 require("./configs/passport");
 
 mongoose
-	.connect("mongodb://localhost/getaways-backend", {
+	.connect(process.env.MONGODB_URI, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
 	})
