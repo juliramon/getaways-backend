@@ -35,6 +35,10 @@ const storySchema = new Schema(
 			type: Schema.Types.ObjectId,
 			ref: "User",
 		},
+		isRemoved: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	{
 		timestamps: true,
