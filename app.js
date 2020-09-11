@@ -46,13 +46,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 
-app.use(
-	require("node-sass-middleware")({
-		src: path.join(__dirname, "public"),
-		dest: path.join(__dirname, "public"),
-		sourceMap: true,
-	})
-);
+app.use(express.static(path.join(__dirname, "build")));
+
+// app.use(
+// 	require("node-sass-middleware")({
+// 		src: path.join(__dirname, "public"),
+// 		dest: path.join(__dirname, "public"),
+// 		sourceMap: true,
+// 	})
+// );
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
@@ -81,8 +83,7 @@ app.use("/api", contentRoutes);
 app.use("/api", require("./routes/file-upload-routes"));
 
 app.use((req, res, next) => {
-	// If no routes match, send them the React HTML.
-	res.sendFile(__dirname + "/public/index.html");
+	res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 module.exports = app;
