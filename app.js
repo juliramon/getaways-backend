@@ -76,8 +76,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.locals.title = "Express - Generated with IronGenerator";
-
 const index = require("./routes/index");
 const authRoutes = require("./routes/auth-routes");
 const contentRoutes = require("./routes/content-routes");
