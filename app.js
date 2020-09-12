@@ -70,7 +70,7 @@ app.use(
 		secret: "secret string",
 		resave: true,
 		saveUninitialized: true,
-		cookie: {maxAge: 600000},
+		cookie: {maxAge: 6000000000},
 	})
 );
 app.use(passport.initialize());
