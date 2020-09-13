@@ -1,10 +1,8 @@
-const express = require("express");
-const authRoutes = express.Router();
-const passport = require("passport");
 const bcrypt = require("bcryptjs");
-const User = require("../models/user-model");
+const User = require("../models/User.model");
+const passport = require("passport");
 
-authRoutes.post("/auth/signup", (req, res, next) => {
+const signUpUser = (req, res, next) => {
 	const {fullName, email, password} = req.body;
 	if (!fullName || !email || !password) {
 		return res
@@ -47,9 +45,9 @@ authRoutes.post("/auth/signup", (req, res, next) => {
 			});
 		});
 	});
-});
+};
 
-authRoutes.post("/auth/login", (req, res, next) => {
+const logInUser = (req, res, next) => {
 	passport.authenticate("local", (err, theUser, failureDetails) => {
 		if (err) {
 			return res
@@ -63,24 +61,27 @@ authRoutes.post("/auth/login", (req, res, next) => {
 			if (err) {
 				return res.status(500).json({message: "Session save went bad."});
 			}
+			console.log("theUser =>", req.user);
+			console.log("thesession =>", req.session);
+			console.log("thesession user =>", req.session.passport.user);
 			res.status(200).json(theUser);
 		});
 	})(req, res, next);
-});
+};
 
-authRoutes.post("/auth/logout", (req, res, next) => {
+const logOutUser = (req, res, next) => {
 	req.logout();
 	res.status(200).json({message: "Log out success!"});
-});
+};
 
-authRoutes.get("/auth/loggedin", (req, res, next) => {
+const checkLoggedInUser = (req, res, next) => {
 	if (req.isAuthenticated()) {
 		return res.status(200).json(req.user);
 	}
 	res.status(403).json({message: "Unauthorized"});
-});
+};
 
-authRoutes.post("/auth/googlesignup", (req, res, next) => {
+const signUpGoogleUser = (req, res, next) => {
 	console.log(req.body);
 	const {fullName, email, imageUrl} = req.body;
 	if (!fullName || !email || !imageUrl) {
@@ -114,6 +115,12 @@ authRoutes.post("/auth/googlesignup", (req, res, next) => {
 			});
 		});
 	});
-});
+};
 
-module.exports = authRoutes;
+module.exports = {
+	signUpUser,
+	logInUser,
+	logOutUser,
+	checkLoggedInUser,
+	signUpGoogleUser,
+};

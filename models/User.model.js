@@ -17,10 +17,12 @@ const userSchema = new Schema(
 		avatar: {
 			type: String,
 			default:
-				"https://res.cloudinary.com/juligoodie/image/upload/v1597507413/Getaways.guru/empty-avatar_jg3ooj.svg",
+				"https://res.cloudinary.com/juligoodie/image/upload/v1600010509/getaways-guru/static-files/default-user-avatar_cpv92p.svg",
 		},
 		cover: {
 			type: String,
+			default:
+				"https://res.cloudinary.com/juligoodie/image/upload/v1600009875/getaways-guru/static-files/default-user-cover_d3wngv.png",
 		},
 		username: {
 			type: String,
