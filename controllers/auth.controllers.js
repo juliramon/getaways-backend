@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const User = require("../models/user-model");
+const User = require("../models/User.model");
 const passport = require("passport");
 
 const signUpUser = (req, res, next) => {
@@ -61,6 +61,9 @@ const logInUser = (req, res, next) => {
 			if (err) {
 				return res.status(500).json({message: "Session save went bad."});
 			}
+			console.log("theUser =>", req.user);
+			console.log("thesession =>", req.session);
+			console.log("thesession user =>", req.session.passport.user);
 			res.status(200).json(theUser);
 		});
 	})(req, res, next);

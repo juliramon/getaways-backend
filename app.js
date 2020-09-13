@@ -1,5 +1,4 @@
 require("dotenv").config();
-require("./configs/session.config");
 
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -8,11 +7,12 @@ const favicon = require("serve-favicon");
 const logger = require("morgan");
 const path = require("path");
 const cors = require("cors");
-
 const passport = require("passport");
+const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
+const mongoose = require("mongoose");
 
 require("./configs/db.config");
-require("./configs/passport");
 
 const app_name = require("./package.json").name;
 const debug = require("debug")(
@@ -20,6 +20,19 @@ const debug = require("debug")(
 );
 
 const app = express();
+
+app.use(
+	session({
+		secret: process.env.SESS_SECRET,
+		resave: true,
+		saveUninitialized: true,
+		cookie: {maxAge: 600 * 10000},
+		store: new MongoStore({
+			mongooseConnection: mongoose.connection,
+			ttl: 60 * 60 * 24,
+		}),
+	})
+);
 
 app.use(
 	cors({
@@ -44,6 +57,7 @@ app.use(favicon(path.join(__dirname, "/build/favicon.ico")));
 
 app.use(passport.initialize());
 app.use(passport.session());
+require("./configs/passport.config");
 
 const index = require("./routes/index");
 const authRoutes = require("./routes/auth.routes");

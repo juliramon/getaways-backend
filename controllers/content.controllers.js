@@ -1,13 +1,12 @@
-require("../configs/session.config");
-const mongoose = require("mongoose");
-
-const Activity = require("../models/activity-model");
-const Place = require("../models/place-model");
-const Story = require("../models/story-model");
-const User = require("../models/user-model");
-const Bookmark = require("../models/bookmark-model");
+const Activity = require("../models/Activity.model");
+const Place = require("../models/Place.model");
+const Story = require("../models/Story.model");
+const User = require("../models/User.model");
+const Bookmark = require("../models/Bookmark.model");
 
 const postActivity = (req, res, next) => {
+	console.log("session", req.session);
+	console.log("user in session", req.user);
 	Activity.create({
 		type: req.body.type,
 		title: req.body.title,
@@ -31,7 +30,7 @@ const postActivity = (req, res, next) => {
 		activity_opening_hours: req.body.activity_opening_hours,
 		duration: req.body.duration,
 		price: req.body.price,
-		owner: req.user._id,
+		owner: req.user._id || req.session.passport.user,
 	})
 		.then((response) => res.json(response))
 		.catch((err) => res.json(err));
@@ -118,7 +117,7 @@ const postPlace = (req, res, next) => {
 		place_id: req.body.place_id,
 		place_opening_hours: req.body.place_opening_hours,
 		price: req.body.price,
-		owner: req.user._id,
+		owner: req.user._id || req.session.passport.user,
 	})
 		.then((response) => res.json(response))
 		.catch((err) => res.json(err));
@@ -144,7 +143,6 @@ const getPlaceDetails = (req, res, next) => {
 };
 
 const editPlaceDetails = (req, res, next) => {
-	console.log(req.body);
 	if (req.body.isRemoved === true) {
 		Place.findByIdAndUpdate(req.params.id, {isRemoved: true})
 			.then((res) => res.json({message: "Place removed successfully"}))
@@ -163,7 +161,7 @@ const postStory = (req, res, next) => {
 		subtitle: req.body.subtitle,
 		images: req.body.image,
 		description: req.body.description,
-		owner: req.user._id,
+		owner: req.user._id || req.session.passport.user,
 	})
 		.then((response) => res.json(response))
 		.catch((err) => res.json(err));
@@ -227,7 +225,7 @@ const bookmarkListing = (req, res, next) => {
 		} else {
 			Bookmark.create({
 				[contentRef]: req.body.listingId,
-				owner: req.user._id,
+				owner: req.user._id || req.session.passport.user,
 			})
 				.then((res) => res.json({message: "Listing bookmarked!"}))
 				.catch((err) => res.json(err));
@@ -236,7 +234,10 @@ const bookmarkListing = (req, res, next) => {
 };
 
 const getUserBookmarks = (req, res, next) => {
-	Bookmark.find({owner: req.user._id, isRemoved: false})
+	Bookmark.find({
+		owner: req.user._id || req.session.passport.user,
+		isRemoved: false,
+	})
 		.populate("owner")
 		.populate("bookmarkActivityRef")
 		.populate("bookmarkPlaceRef")
@@ -246,7 +247,7 @@ const getUserBookmarks = (req, res, next) => {
 };
 
 const getAllBookmarks = (req, res, next) => {
-	Bookmark.find({owner: req.user._id})
+	Bookmark.find({owner: req.user._id || req.session.passport.user})
 		.populate("owner")
 		.populate("bookmarkActivityRef")
 		.populate("bookmarkPlaceRef")
