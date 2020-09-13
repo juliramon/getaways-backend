@@ -1,12 +1,13 @@
-const express = require("express");
-const router = express.Router();
+require("../configs/session.config");
+const mongoose = require("mongoose");
+
 const Activity = require("../models/activity-model");
 const Place = require("../models/place-model");
 const Story = require("../models/story-model");
 const User = require("../models/user-model");
 const Bookmark = require("../models/bookmark-model");
 
-router.post("/activity", (req, res, next) => {
+const postActivity = (req, res, next) => {
 	Activity.create({
 		type: req.body.type,
 		title: req.body.title,
@@ -34,30 +35,30 @@ router.post("/activity", (req, res, next) => {
 	})
 		.then((response) => res.json(response))
 		.catch((err) => res.json(err));
-});
+};
 
-router.get("/activities", (req, res, next) => {
+const getActivities = (req, res, next) => {
 	Activity.find({isRemoved: false})
 		.then((activities) => res.json(activities))
 		.catch((err) => res.json(err));
-});
+};
 
-router.get("/users/:id/activities", (req, res, next) => {
+const getUserActivities = (req, res, next) => {
 	//solo deberia funcionar si el user esta autenticado => isAuthenticated
 	// passport middleware
 	Activity.find({owner: req.params.id, isRemoved: false})
 		.then((activities) => res.json(activities))
 		.catch((err) => res.json(err));
-});
+};
 
-router.get("/activities/:id", (req, res, next) => {
+const getActivityDetails = (req, res, next) => {
 	Activity.findById(req.params.id)
 		.populate("owner")
 		.then((activity) => res.json(activity))
 		.catch((err) => res.json(err));
-});
+};
 
-router.put("/activities/:id", (req, res, next) => {
+const editActivityDetails = (req, res, next) => {
 	if (req.body.isRemoved === true) {
 		Activity.findByIdAndUpdate(req.params.id, {isRemoved: true})
 			.then(() => res.json({message: "Activity removed successfully"}))
@@ -67,21 +68,21 @@ router.put("/activities/:id", (req, res, next) => {
 			.then((res) => res.json({message: "Activity updated successfully"}))
 			.catch((err) => res.json(err));
 	}
-});
+};
 
-router.get("/users", (req, res, next) => {
+const getUsers = (req, res, next) => {
 	User.find({})
 		.then((users) => res.json(users))
 		.catch((err) => res.json(err));
-});
+};
 
-router.get("/users/:id", (req, res, next) => {
+const getUserDetails = (req, res, next) => {
 	User.findById(req.params.id)
 		.then((user) => res.json(user))
 		.catch((err) => res.json(err));
-});
+};
 
-router.put("/users/:id", (req, res, next) => {
+const editUserDetails = (req, res, next) => {
 	if (req.body.cover) {
 		User.findByIdAndUpdate(req.params.id, req.body)
 			.then((res) => res.json({message: "User updated"}))
@@ -91,9 +92,9 @@ router.put("/users/:id", (req, res, next) => {
 			.then((res) => res.json({message: "User updated"}))
 			.catch((err) => res.json(err));
 	}
-});
+};
 
-router.post("/place", (req, res, next) => {
+const postPlace = (req, res, next) => {
 	Place.create({
 		type: req.body.type,
 		title: req.body.title,
@@ -121,28 +122,28 @@ router.post("/place", (req, res, next) => {
 	})
 		.then((response) => res.json(response))
 		.catch((err) => res.json(err));
-});
+};
 
-router.get("/places", (req, res, next) => {
+const getPlaces = (req, res, next) => {
 	Place.find({isRemoved: false})
 		.then((places) => res.json(places))
 		.catch((err) => res.json(err));
-});
+};
 
-router.get("/users/:id/places", (req, res, next) => {
+const getUserPlaces = (req, res, next) => {
 	Place.find({owner: req.params.id, isRemoved: false})
 		.then((places) => res.json(places))
 		.catch((err) => res.json(err));
-});
+};
 
-router.get("/places/:id", (req, res, next) => {
+const getPlaceDetails = (req, res, next) => {
 	Place.findById(req.params.id)
 		.populate("owner")
 		.then((place) => res.json(place))
 		.catch((err) => res.json(err));
-});
+};
 
-router.put("/places/:id", (req, res, next) => {
+const editPlaceDetails = (req, res, next) => {
 	console.log(req.body);
 	if (req.body.isRemoved === true) {
 		Place.findByIdAndUpdate(req.params.id, {isRemoved: true})
@@ -153,9 +154,9 @@ router.put("/places/:id", (req, res, next) => {
 			.then((res) => res.json({message: "Place updated successfully"}))
 			.catch((err) => res.json(err));
 	}
-});
+};
 
-router.post("/story", (req, res, next) => {
+const postStory = (req, res, next) => {
 	Story.create({
 		type: req.body.type,
 		title: req.body.title,
@@ -166,28 +167,28 @@ router.post("/story", (req, res, next) => {
 	})
 		.then((response) => res.json(response))
 		.catch((err) => res.json(err));
-});
+};
 
-router.get("/stories", (req, res, next) => {
+const getStories = (req, res, next) => {
 	Story.find({isRemoved: false})
 		.then((stories) => res.json(stories))
 		.catch((err) => res.json(err));
-});
+};
 
-router.get("/users/:id/stories", (req, res, next) => {
+const getUserStories = (req, res, next) => {
 	Story.find({owner: req.params.id, isRemoved: false})
 		.then((stories) => res.json(stories))
 		.catch((err) => res.json(err));
-});
+};
 
-router.get("/stories/:id", (req, res, next) => {
+const getStoryDetails = (req, res, next) => {
 	Story.findById(req.params.id)
 		.populate("owner")
 		.then((story) => res.json(story))
 		.catch((err) => res.json(err));
-});
+};
 
-router.put("/stories/:id", (req, res, next) => {
+const editStoryDetails = (req, res, next) => {
 	console.log(req.body);
 	if (req.body.isRemoved === true) {
 		Story.findByIdAndUpdate(req.params.id, {isRemoved: true})
@@ -198,9 +199,9 @@ router.put("/stories/:id", (req, res, next) => {
 			.then((res) => res.json({message: "Story updated successfully"}))
 			.catch((err) => res.json(err));
 	}
-});
+};
 
-router.post("/bookmark", (req, res, next) => {
+const bookmarkListing = (req, res, next) => {
 	let contentRef;
 	if (req.body.listingType === "activity") {
 		contentRef = "bookmarkActivityRef";
@@ -232,9 +233,9 @@ router.post("/bookmark", (req, res, next) => {
 				.catch((err) => res.json(err));
 		}
 	});
-});
+};
 
-router.get("/activebookmarks", (req, res, next) => {
+const getUserBookmarks = (req, res, next) => {
 	Bookmark.find({owner: req.user._id, isRemoved: false})
 		.populate("owner")
 		.populate("bookmarkActivityRef")
@@ -242,9 +243,9 @@ router.get("/activebookmarks", (req, res, next) => {
 		.populate("bookmarkStoryRef")
 		.then((bookmarks) => res.json(bookmarks))
 		.catch((err) => res.json(err));
-});
+};
 
-router.get("/bookmarks", (req, res, next) => {
+const getAllBookmarks = (req, res, next) => {
 	Bookmark.find({owner: req.user._id})
 		.populate("owner")
 		.populate("bookmarkActivityRef")
@@ -252,9 +253,9 @@ router.get("/bookmarks", (req, res, next) => {
 		.populate("bookmarkStoryRef")
 		.then((bookmarks) => res.json(bookmarks))
 		.catch((err) => res.json(err));
-});
+};
 
-router.get("/searchPlaces", (req, res, next) => {
+const searchPlaces = (req, res, next) => {
 	if (
 		req.query.placeRegion ||
 		req.query.placeType ||
@@ -332,9 +333,9 @@ router.get("/searchPlaces", (req, res, next) => {
 	} else {
 		Place.find({}).then((results) => res.json(results));
 	}
-});
+};
 
-router.get("/searchActivities", (req, res, next) => {
+const searchActivities = (req, res, next) => {
 	if (
 		req.query.activityRegion ||
 		req.query.activitySeason ||
@@ -394,6 +395,30 @@ router.get("/searchActivities", (req, res, next) => {
 	} else {
 		Activity.find({}).then((results) => res.json(results));
 	}
-});
+};
 
-module.exports = router;
+module.exports = {
+	postActivity,
+	getActivities,
+	getUserActivities,
+	getActivityDetails,
+	editActivityDetails,
+	getUsers,
+	getUserDetails,
+	editUserDetails,
+	postPlace,
+	getPlaces,
+	getUserPlaces,
+	getPlaceDetails,
+	editPlaceDetails,
+	postStory,
+	getStories,
+	getUserStories,
+	getStoryDetails,
+	editStoryDetails,
+	bookmarkListing,
+	getUserBookmarks,
+	getAllBookmarks,
+	searchPlaces,
+	searchActivities,
+};
