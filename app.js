@@ -41,6 +41,8 @@ app.use(
 			"http://localhost:3000",
 			"http://localhost:3001",
 			"https://getaways-guru.herokuapp.com",
+			"http://getaways.guru",
+			"https://www.getaways.guru",
 		],
 	})
 );
