@@ -398,7 +398,8 @@ const searchActivities = (req, res, next) => {
 	}
 };
 
-const searchBarQuery = (req, res, next) => {
+const searchBarQuery = async (req, res, next) => {
+	console.log(req.query);
 	let query = req.query;
 	let locationToSearch, categoriesToSearch, typesToSearch;
 	if (Object.keys(query)[0] === "activityLocation") {
@@ -514,7 +515,64 @@ const searchBarQuery = (req, res, next) => {
 				res.json(results);
 			});
 		}
+	} else if (Object.keys(query)[0] === "query") {
+		const places = await Place.find({
+			$or: [
+				{region: {$regex: query.query, $options: "i"}},
+				{place_full_address: {$regex: query.query, $options: "i"}},
+				{place_locality: {$regex: query.query, $options: "i"}},
+				{place_province: {$regex: query.query, $options: "i"}},
+				{title: {$regex: query.query, $options: "i"}},
+				{subtitle: {$regex: query.query, $options: "i"}},
+				{title: {$regex: query.query, $options: "i"}},
+				{description: {$regex: query.query, $options: "i"}},
+			],
+		});
+		const activities = await Activity.find({
+			$or: [
+				{region: {$regex: query.query, $options: "i"}},
+				{activity_full_address: {$regex: query.query, $options: "i"}},
+				{activity_locality: {$regex: query.query, $options: "i"}},
+				{activity_province: {$regex: query.query, $options: "i"}},
+				{title: {$regex: query.query, $options: "i"}},
+				{subtitle: {$regex: query.query, $options: "i"}},
+				{title: {$regex: query.query, $options: "i"}},
+				{description: {$regex: query.query, $options: "i"}},
+			],
+		});
+
+		res.json({places: places, activities: activities});
 	}
+};
+
+const searchUserCustomActivities = (req, res, next) => {
+	console.log(req.user);
+	let {categoriesToFollow, seasonsToFollow, regionsToFollow} = req.user;
+	Activity.find({
+		$or: [
+			{categories: {$in: categoriesToFollow}},
+			{seasons: {$in: seasonsToFollow}},
+			{region: {$in: regionsToFollow}},
+		],
+	}).then((results) => res.json(results));
+};
+
+const searchUserCustomPlaces = (req, res, next) => {
+	console.log(req.user);
+	let {
+		typesToFollow,
+		categoriesToFollow,
+		seasonsToFollow,
+		regionsToFollow,
+	} = req.user;
+	Place.find({
+		$or: [
+			{categories: {$in: categoriesToFollow}},
+			{seasons: {$in: seasonsToFollow}},
+			{region: {$in: regionsToFollow}},
+			{placeType: {$in: typesToFollow}},
+		],
+	}).then((results) => res.json(results));
 };
 
 module.exports = {
@@ -542,4 +600,6 @@ module.exports = {
 	searchPlaces,
 	searchActivities,
 	searchBarQuery,
+	searchUserCustomActivities,
+	searchUserCustomPlaces,
 };
