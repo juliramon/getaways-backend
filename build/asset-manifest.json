@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/static/css/main.626293c9.chunk.css",
+    "main.js": "/static/js/main.56240ddc.chunk.js",
+    "main.js.map": "/static/js/main.56240ddc.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.ed961379.js",
+    "runtime-main.js.map": "/static/js/runtime-main.ed961379.js.map",
+    "static/css/2.11829350.chunk.css": "/static/css/2.11829350.chunk.css",
+    "static/js/2.7f845325.chunk.js": "/static/js/2.7f845325.chunk.js",
+    "static/js/2.7f845325.chunk.js.map": "/static/js/2.7f845325.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.de58d9769ca9b02b6a43ca2f7245b4b9.js": "/precache-manifest.de58d9769ca9b02b6a43ca2f7245b4b9.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.11829350.chunk.css.map": "/static/css/2.11829350.chunk.css.map",
+    "static/css/main.626293c9.chunk.css.map": "/static/css/main.626293c9.chunk.css.map",
+    "static/js/2.7f845325.chunk.js.LICENSE.txt": "/static/js/2.7f845325.chunk.js.LICENSE.txt",
+    "static/media/Inter-Regular.otf": "/static/media/Inter-Regular.9a9eeddb.otf",
+    "static/media/MADE-Tommy-Soft-Black-PERSONAL-USE.woff": "/static/media/MADE-Tommy-Soft-Black-PERSONAL-USE.1406dd01.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ed961379.js",
+    "static/css/2.11829350.chunk.css",
+    "static/js/2.7f845325.chunk.js",
+    "static/css/main.626293c9.chunk.css",
+    "static/js/main.56240ddc.chunk.js"
+  ]
+}
