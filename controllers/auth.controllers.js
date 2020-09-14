@@ -47,6 +47,19 @@ const signUpUser = (req, res, next) => {
 	});
 };
 
+const completeUserAccount = (req, res, next) => {
+	console.log(req.body);
+	User.findByIdAndUpdate(req.user._id, {
+		accountCompleted: req.body.accountCompleted,
+		typesToFollow: req.body.typesToFollow,
+		categoriesToFollow: req.body.categoriesToFollow,
+		regionsToFollow: req.body.regionsToFollow,
+		seasonsToFollow: req.body.seasonsToFollow,
+	})
+		.then((res) => res.json({message: "Account completed!"}))
+		.catch((err) => res.json(err));
+};
+
 const logInUser = (req, res, next) => {
 	passport.authenticate("local", (err, theUser, failureDetails) => {
 		if (err) {
@@ -119,6 +132,7 @@ const signUpGoogleUser = (req, res, next) => {
 
 module.exports = {
 	signUpUser,
+	completeUserAccount,
 	logInUser,
 	logOutUser,
 	checkLoggedInUser,

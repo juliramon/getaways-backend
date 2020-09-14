@@ -24,6 +24,7 @@ const {
 	getAllBookmarks,
 	searchPlaces,
 	searchActivities,
+	searchBarQuery,
 } = require("../controllers/content.controllers");
 
 const router = express.Router();
@@ -51,6 +52,7 @@ router
 	.get("/activebookmarks", getUserBookmarks)
 	.get("/bookmarks", getAllBookmarks)
 	.get("/searchPlaces", searchPlaces)
-	.get("/searchActivities", searchActivities);
+	.get("/searchActivities", searchActivities)
+	.get("/searchQuery", searchBarQuery);
 
 module.exports = router;

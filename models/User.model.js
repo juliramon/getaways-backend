@@ -46,6 +46,41 @@ const userSchema = new Schema(
 			type: Schema.Types.ObjectId,
 			ref: "Bookmark",
 		},
+		accountCompleted: {
+			type: Boolean,
+			default: false,
+		},
+		typesToFollow: {
+			type: [String],
+			enum: [
+				"apartment",
+				"cabin",
+				"treeHouse",
+				"ruralHouse",
+				"trailer",
+				"hotel",
+			],
+		},
+		categoriesToFollow: {
+			type: [String],
+			enum: ["romantic", "adventure", "gastronomic", "cultural", "relax"],
+		},
+		seasonsToFollow: {
+			type: [String],
+			enum: ["winter", "spring", "summer", "autumn"],
+		},
+		regionsToFollow: {
+			type: [String],
+			enum: [
+				"barcelona",
+				"tarragona",
+				"girona",
+				"lleida",
+				"costaBrava",
+				"costaDaurada",
+				"pirineus",
+			],
+		},
 	},
 	{
 		timestamps: true,

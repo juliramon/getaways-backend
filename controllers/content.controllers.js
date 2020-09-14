@@ -398,6 +398,125 @@ const searchActivities = (req, res, next) => {
 	}
 };
 
+const searchBarQuery = (req, res, next) => {
+	let query = req.query;
+	let locationToSearch, categoriesToSearch, typesToSearch;
+	if (Object.keys(query)[0] === "activityLocation") {
+		if (req.query.activityLocation) {
+			locationToSearch = req.query.activityLocation;
+		}
+		if (req.query.activityCategory) {
+			categoriesToSearch = req.query.activityCategory.split(",");
+		}
+		if (locationToSearch && categoriesToSearch === undefined) {
+			Activity.find({
+				$or: [
+					{region: {$regex: locationToSearch, $options: "i"}},
+					{activity_full_address: {$regex: locationToSearch, $options: "i"}},
+					{activity_locality: {$regex: locationToSearch, $options: "i"}},
+					{activity_province: {$regex: locationToSearch, $options: "i"}},
+				],
+			}).then((results) => {
+				res.json(results);
+			});
+		} else if (locationToSearch && categoriesToSearch.length > 0) {
+			Activity.find({
+				$and: [
+					{
+						$or: [
+							{region: {$regex: locationToSearch, $options: "i"}},
+							{
+								activity_full_address: {
+									$regex: locationToSearch,
+									$options: "i",
+								},
+							},
+							{activity_locality: {$regex: locationToSearch, $options: "i"}},
+							{activity_province: {$regex: locationToSearch, $options: "i"}},
+						],
+					},
+					{categories: {$in: categoriesToSearch}},
+				],
+			}).then((results) => {
+				res.json(results);
+			});
+		}
+	} else if (Object.keys(query)[0] === "placeLocation") {
+		if (req.query.placeLocation) {
+			locationToSearch = req.query.placeLocation;
+		}
+		if (req.query.placeCategory) {
+			categoriesToSearch = req.query.placeCategory.split(",");
+		}
+		if (req.query.placeType) {
+			typesToSearch = req.query.placeType.split(",");
+		}
+		if (locationToSearch && categoriesToSearch === undefined) {
+			Place.find({
+				$or: [
+					{region: {$regex: locationToSearch, $options: "i"}},
+					{place_full_address: {$regex: locationToSearch, $options: "i"}},
+					{place_locality: {$regex: locationToSearch, $options: "i"}},
+					{place_province: {$regex: locationToSearch, $options: "i"}},
+				],
+			}).then((results) => {
+				res.json(results);
+			});
+		} else if (
+			locationToSearch &&
+			categoriesToSearch.length > 0 &&
+			typesToSearch === undefined
+		) {
+			Place.find({
+				$and: [
+					{
+						$or: [
+							{region: {$regex: locationToSearch, $options: "i"}},
+							{
+								place_full_address: {
+									$regex: locationToSearch,
+									$options: "i",
+								},
+							},
+							{place_locality: {$regex: locationToSearch, $options: "i"}},
+							{place_province: {$regex: locationToSearch, $options: "i"}},
+						],
+					},
+					{categories: {$in: categoriesToSearch}},
+				],
+			}).then((results) => {
+				res.json(results);
+			});
+		} else if (
+			locationToSearch &&
+			categoriesToSearch.length > 0 &&
+			typesToSearch > 0
+		) {
+			Place.find({
+				$and: [
+					{
+						$or: [
+							{region: {$regex: locationToSearch, $options: "i"}},
+							{
+								place_full_address: {
+									$regex: locationToSearch,
+									$options: "i",
+								},
+							},
+							{place_locality: {$regex: locationToSearch, $options: "i"}},
+							{place_province: {$regex: locationToSearch, $options: "i"}},
+						],
+					},
+					{categories: {$in: categoriesToSearch}},
+					{placeType: {$in: typesToSearch}},
+				],
+			}).then((results) => {
+				res.json(results);
+			});
+		}
+	}
+};
+
 module.exports = {
 	postActivity,
 	getActivities,
@@ -422,4 +541,5 @@ module.exports = {
 	getAllBookmarks,
 	searchPlaces,
 	searchActivities,
+	searchBarQuery,
 };
