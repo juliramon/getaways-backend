@@ -2,6 +2,7 @@ const express = require("express");
 
 const {
 	signUpUser,
+	completeUserAccount,
 	logInUser,
 	logOutUser,
 	checkLoggedInUser,
@@ -12,6 +13,7 @@ const router = express.Router();
 
 router
 	.post("/auth/signup", signUpUser)
+	.put("/auth/complete-account", completeUserAccount)
 	.post("/auth/login", logInUser)
 	.post("/auth/logout", logOutUser)
 	.get("/auth/loggedin", checkLoggedInUser)
