@@ -25,6 +25,8 @@ const {
 	searchPlaces,
 	searchActivities,
 	searchBarQuery,
+	searchUserCustomActivities,
+	searchUserCustomPlaces,
 } = require("../controllers/content.controllers");
 
 const router = express.Router();
@@ -53,6 +55,8 @@ router
 	.get("/bookmarks", getAllBookmarks)
 	.get("/searchPlaces", searchPlaces)
 	.get("/searchActivities", searchActivities)
-	.get("/searchQuery", searchBarQuery);
+	.get("/searchQuery", searchBarQuery)
+	.get("/searchUserCustomActivities", searchUserCustomActivities)
+	.get("/searchUserCustomPlaces", searchUserCustomPlaces);
 
 module.exports = router;
