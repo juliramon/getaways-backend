@@ -452,7 +452,11 @@ const searchBarQuery = async (req, res, next) => {
 		if (req.query.placeType) {
 			typesToSearch = req.query.placeType.split(",");
 		}
-		if (locationToSearch && categoriesToSearch === undefined) {
+		if (
+			locationToSearch &&
+			categoriesToSearch === undefined &&
+			typesToSearch === undefined
+		) {
 			Place.find({
 				$or: [
 					{region: {$regex: locationToSearch, $options: "i"}},
@@ -463,11 +467,7 @@ const searchBarQuery = async (req, res, next) => {
 			}).then((results) => {
 				res.json(results);
 			});
-		} else if (
-			locationToSearch &&
-			categoriesToSearch.length > 0 &&
-			typesToSearch === undefined
-		) {
+		} else if (locationToSearch && typesToSearch) {
 			Place.find({
 				$and: [
 					{
@@ -483,16 +483,12 @@ const searchBarQuery = async (req, res, next) => {
 							{place_province: {$regex: locationToSearch, $options: "i"}},
 						],
 					},
-					{categories: {$in: categoriesToSearch}},
+					{placeType: {$in: typesToSearch}},
 				],
 			}).then((results) => {
 				res.json(results);
 			});
-		} else if (
-			locationToSearch &&
-			categoriesToSearch.length > 0 &&
-			typesToSearch > 0
-		) {
+		} else if (locationToSearch && categoriesToSearch && typesToSearch) {
 			Place.find({
 				$and: [
 					{
