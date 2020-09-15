@@ -483,7 +483,7 @@ const searchBarQuery = async (req, res, next) => {
 							{place_province: {$regex: locationToSearch, $options: "i"}},
 						],
 					},
-					{categories: {$in: categoriesToSearch}},
+					{placeType: {$in: typesToSearch}},
 				],
 			}).then((results) => {
 				res.json(results);
