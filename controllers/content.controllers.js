@@ -5,8 +5,6 @@ const User = require("../models/User.model");
 const Bookmark = require("../models/Bookmark.model");
 
 const postActivity = (req, res, next) => {
-	console.log("session", req.session);
-	console.log("user in session", req.user);
 	Activity.create({
 		type: req.body.type,
 		title: req.body.title,
@@ -187,7 +185,6 @@ const getStoryDetails = (req, res, next) => {
 };
 
 const editStoryDetails = (req, res, next) => {
-	console.log(req.body);
 	if (req.body.isRemoved === true) {
 		Story.findByIdAndUpdate(req.params.id, {isRemoved: true})
 			.then((res) => res.json({message: "Story removed successfully"}))
@@ -399,7 +396,6 @@ const searchActivities = (req, res, next) => {
 };
 
 const searchBarQuery = async (req, res, next) => {
-	console.log(req.query);
 	let query = req.query;
 	let locationToSearch, categoriesToSearch, typesToSearch;
 	if (Object.keys(query)[0] === "activityLocation") {
@@ -542,7 +538,6 @@ const searchBarQuery = async (req, res, next) => {
 };
 
 const searchUserCustomActivities = (req, res, next) => {
-	console.log(req.user);
 	let {categoriesToFollow, seasonsToFollow, regionsToFollow} = req.user;
 	Activity.find({
 		$or: [
@@ -554,7 +549,6 @@ const searchUserCustomActivities = (req, res, next) => {
 };
 
 const searchUserCustomPlaces = (req, res, next) => {
-	console.log(req.user);
 	let {
 		typesToFollow,
 		categoriesToFollow,

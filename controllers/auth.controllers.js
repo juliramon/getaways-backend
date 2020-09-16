@@ -48,7 +48,6 @@ const signUpUser = (req, res, next) => {
 };
 
 const completeUserAccount = (req, res, next) => {
-	console.log(req.body);
 	User.findByIdAndUpdate(req.user._id, {
 		accountCompleted: req.body.accountCompleted,
 		typesToFollow: req.body.typesToFollow,
@@ -74,9 +73,6 @@ const logInUser = (req, res, next) => {
 			if (err) {
 				return res.status(500).json({message: "Session save went bad."});
 			}
-			console.log("theUser =>", req.user);
-			console.log("thesession =>", req.session);
-			console.log("thesession user =>", req.session.passport.user);
 			res.status(200).json(theUser);
 		});
 	})(req, res, next);
