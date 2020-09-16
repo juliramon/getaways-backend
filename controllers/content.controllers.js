@@ -197,7 +197,9 @@ const editStoryDetails = (req, res, next) => {
 };
 
 const bookmarkListing = (req, res, next) => {
+	console.log("session =>", req.session);
 	let contentRef;
+	console.log(req.body);
 	if (req.body.listingType === "activity") {
 		contentRef = "bookmarkActivityRef";
 	} else if (req.body.listingType === "place") {
@@ -205,29 +207,29 @@ const bookmarkListing = (req, res, next) => {
 	} else {
 		contentRef = "bookmarkStoryRef";
 	}
-	Bookmark.find({[contentRef]: req.body.listingId}).then((arrBookmarks) => {
-		let bookmark = arrBookmarks[0];
-		if (bookmark) {
-			if (bookmark.isRemoved === false) {
-				Bookmark.updateOne({_id: bookmark._id}, {isRemoved: true}).then(() =>
-					res
-						.json({message: "Listing removed from bookmarks!"})
-						.catch((err) => res.json(err))
-				);
-			} else if (bookmark.isRemoved === true) {
-				Bookmark.updateOne({_id: bookmark._id}, {isRemoved: false})
-					.then(() => res.json({message: "Listing bookmarked!"}))
+	Bookmark.find({[contentRef]: req.body.listingId, owner: req.user._id}).then(
+		(arrBookmarks) => {
+			let bookmark = arrBookmarks[0];
+			if (bookmark) {
+				if (bookmark.isRemoved === false) {
+					Bookmark.updateOne({_id: bookmark._id}, {isRemoved: true})
+						.then(() => res.json({message: "Listing removed from bookmarks!"}))
+						.catch((err) => res.json(err));
+				} else if (bookmark.isRemoved === true) {
+					Bookmark.updateOne({_id: bookmark._id}, {isRemoved: false})
+						.then(() => res.json({message: "Listing bookmarked!"}))
+						.catch((err) => res.json(err));
+				}
+			} else {
+				Bookmark.create({
+					[contentRef]: req.body.listingId,
+					owner: req.session.passport.user,
+				})
+					.then((res) => res.json({message: "Listing bookmarked :)!"}))
 					.catch((err) => res.json(err));
 			}
-		} else {
-			Bookmark.create({
-				[contentRef]: req.body.listingId,
-				owner: req.user._id || req.session.passport.user,
-			})
-				.then((res) => res.json({message: "Listing bookmarked!"}))
-				.catch((err) => res.json(err));
 		}
-	});
+	);
 };
 
 const getUserBookmarks = (req, res, next) => {
