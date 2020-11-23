@@ -30,6 +30,21 @@ const userSchema = new Schema(
 		bio: {
 			type: String,
 		},
+		gender: {
+			type: [String],
+			enum: [
+				"masculí", "femení", "altres"
+			]
+		},
+		birthDate: {
+			type: Date
+		},
+		coupleAnniversary: {
+			type: Date
+		},
+		phoneNumber: {
+			type: String
+		},
 		location: {
 			type: String,
 		},

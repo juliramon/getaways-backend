@@ -26,6 +26,9 @@ const storySchema = new Schema(
 			type: String,
 			enum: ["editing", "posted", "archived"],
 		},
+		location: {
+			type: String
+		},
 		likes: {
 			type: Number,
 			min: 0,

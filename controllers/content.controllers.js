@@ -3,6 +3,7 @@ const Place = require("../models/Place.model");
 const Story = require("../models/Story.model");
 const User = require("../models/User.model");
 const Bookmark = require("../models/Bookmark.model");
+const bcrypt = require("bcryptjs");
 
 const postActivity = (req, res, next) => {
 	Activity.create({
@@ -80,6 +81,7 @@ const getUserDetails = (req, res, next) => {
 };
 
 const editUserDetails = (req, res, next) => {
+	console.log('edit profile')
 	if (req.body.cover) {
 		User.findByIdAndUpdate(req.params.id, req.body)
 			.then((res) => res.json({message: "User updated"}))
@@ -90,6 +92,20 @@ const editUserDetails = (req, res, next) => {
 			.catch((err) => res.json(err));
 	}
 };
+
+const editAccountSettings = async (req, res, next) => {
+	console.log('edit settings')
+	
+}
+
+const updatePassword = async (req, res, next) => {
+	console.log('edit settings')
+	let user = await User.findOne({_id: req.params.id});
+	if(!user) return res.status(400).send('No user');
+
+	const validPassword = await bcrypt.compare(req.body.password, user.password);
+	if(!validPassword) return res.json({message: 'invalid password'})
+}
 
 const postPlace = (req, res, next) => {
 	Place.create({
@@ -398,6 +414,7 @@ const searchActivities = (req, res, next) => {
 };
 
 const searchBarQuery = async (req, res, next) => {
+	console.log("req.query =>", req.query);
 	let query = req.query;
 	let locationToSearch, categoriesToSearch, typesToSearch;
 	if (Object.keys(query)[0] === "activityLocation") {
@@ -540,6 +557,7 @@ const searchBarQuery = async (req, res, next) => {
 };
 
 const searchUserCustomActivities = (req, res, next) => {
+	console.log(req.user);
 	let {categoriesToFollow, seasonsToFollow, regionsToFollow} = req.user;
 	Activity.find({
 		$or: [
@@ -576,6 +594,7 @@ module.exports = {
 	getUsers,
 	getUserDetails,
 	editUserDetails,
+	editAccountSettings,
 	postPlace,
 	getPlaces,
 	getUserPlaces,

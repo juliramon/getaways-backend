@@ -9,6 +9,7 @@ const {
 	getUsers,
 	getUserDetails,
 	editUserDetails,
+	editAccountSettings,
 	postPlace,
 	getPlaces,
 	getUserPlaces,
@@ -39,7 +40,8 @@ router
 	.put("/activities/:id", editActivityDetails)
 	.get("/users", getUsers)
 	.get("/users/:id", getUserDetails)
-	.put("/users/:id", editUserDetails)
+	.put("/users/:id/settings", editAccountSettings)
+	.put("/users/:id", editUserDetails)	
 	.post("/place", postPlace)
 	.get("/places", getPlaces)
 	.get("/users/:id/places", getUserPlaces)
